@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload and Process File</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('https://flackable.com/wp-content/uploads/2021/09/Mailchimp-Logo-1024x587.jpg'); /* Replace with your image path */
+            background-size: cover; /* Cover the entire page */
+            background-repeat: no-repeat; /* Prevent repeating the image */
+            background-attachment: fixed; /* Keep the image fixed when scrolling */
+            color: #fff; /* Optional: Set text color to white for better contrast */
+            font-family: Arial, sans-serif;
+        }
+        h1, h2 {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7); /* Slightly transparent background for readability */
+            border-radius: 10px;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        button {
+            margin: 5px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #000; /* Set background to black */
+            color: #fff; /* Set text color to white for contrast */
+            white-space: pre-wrap; /* Preserve formatting */
+            overflow-x: auto; /* Handle long lines */
+        }
+    </style>
+    <script>
+        async function processFile(filename) {
+            try {
+                const response = await fetch('/process-file', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ filename: filename })
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    document.getElementById('result').textContent = result.solved;
+                } else {
+                    document.getElementById('result').textContent = result.message;
+                }
+            } catch (error) {
+                console.error('Error processing file:', error);
+                document.getElementById('result').textContent = 'An error occurred while processing the file.';
+            }
+        }
+
+        async function deleteFile(filename) {
+            try {
+                const response = await fetch('/delete-file', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ filename: filename })
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    alert(result.message); // Display success message
+                    document.getElementById(`file-row-${filename}`).remove();
+                } else {
+                    alert(result.message); // Display error message
+                }
+            } catch (error) {
+                console.error('Error deleting file:', error);
+                alert('An error occurred while deleting the file.');
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Upload new File</h1>
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <input type="submit" value="Upload">
+        </form>
+
+        <h2>Uploaded Files</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Filename</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in files %}
+                <tr id="file-row-{{ file }}">
+                    <td>{{ file }}</td>
+                    <td>
+                        <button onclick="processFile('{{ file }}')">Process</button>
+                        <button onclick="deleteFile('{{ file }}')">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>Result</h2>
+        <pre id="result"></pre> <!-- Display the result here -->
+    </div>
+</body>
+</html>
