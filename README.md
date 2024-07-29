@@ -46,7 +46,7 @@ Freddie's missing uniform service is a simple flask-based web service for deciph
     ./run.sh
     ```
 
-2. The service will be available at `http://127.0.0.1:8000`.
+2. The service will be available at `http://localhost:8000/process-file`.
 
 ### Usage
 
@@ -55,8 +55,15 @@ Freddie's missing uniform service is a simple flask-based web service for deciph
 To upload and process a file with grid coordinates and fold instructions, use the following CURL command:
 
 ```sh
-curl -X POST "http://127.0.0.1:5000/upload" -F "file=sample_input.txt"
+curl -X POST http://localhost:8000/process-file \
+-H "Content-Type: application/json" \
+-d '{"filename": "secret-message.0.txt"}'
 ```
+
+To use the demo UI, please open your web browser and go to `http://localhost:8000/upload-and-process-file`.
+
+Screenshot 2024-07-29 at 1.30.12 PM
+
 
 ### Logging
 Logs are maintained for various operations, including grid creation, folding, and error handling. Logs will display the time taken for folding operations and any errors encountered.
