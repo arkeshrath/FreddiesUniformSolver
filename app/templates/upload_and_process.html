@@ -8,7 +8,7 @@
         body {
             margin: 0;
             padding: 0;
-            background-image: url('https://flackable.com/wp-content/uploads/2021/09/Mailchimp-Logo-1024x587.jpg'); /* Replace with your image path */
+            background-image: url('https://cdn.sanity.io/images/y0etn0sf/production/e36efaf6cd48313b7d7ff76efaef7387a53f532e-3840x2160.jpg'); /* Replace with your image path */
             background-size: cover; /* Cover the entire page */
             background-repeat: no-repeat; /* Prevent repeating the image */
             background-attachment: fixed; /* Keep the image fixed when scrolling */
@@ -108,13 +108,13 @@
 </head>
 <body>
     <div class="container">
-        <h1>Upload new File</h1>
+        <h1>Freddie's Uniform Finder</h1>
         <form method="post" enctype="multipart/form-data">
             <input type="file" name="file">
             <input type="submit" value="Upload">
         </form>
 
-        <h2>Uploaded Files</h2>
+        <h2>Uploaded clues, go ahead hit solve!</h2>
         <table>
             <thead>
                 <tr>
@@ -127,7 +127,7 @@
                 <tr id="file-row-{{ file }}">
                     <td>{{ file }}</td>
                     <td>
-                        <button onclick="processFile('{{ file }}')">Process</button>
+                        <button onclick="processFile('{{ file }}')">Solve</button>
                         <button onclick="deleteFile('{{ file }}')">Delete</button>
                     </td>
                 </tr>
@@ -135,7 +135,7 @@
             </tbody>
         </table>
 
-        <h2>Result</h2>
+        <h2>What does it say?</h2>
         <pre id="result"></pre> <!-- Display the result here -->
     </div>
 </body>
