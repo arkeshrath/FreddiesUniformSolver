@@ -13,7 +13,7 @@ Freddie's missing uniform service is a simple flask-based web service for deciph
 
 1. Unzip the file / Clone the repository:
     ```sh
-    unzip FreddiesUnifromFinder.zip
+    git clone https://github.com/arkeshrath/FreddiesUniformSolver.git
     ```
 
 2. Create a virtual environment:
