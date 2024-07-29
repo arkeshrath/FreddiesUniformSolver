@@ -62,7 +62,7 @@ curl -X POST http://localhost:8000/process-file \
 
 To use the demo UI, please open your web browser and go to `http://localhost:8000/upload-and-process-file`.
 
-Screenshot 2024-07-29 at 1.30.12 PM
+
 
 
 ### Logging
