@@ -93,7 +93,7 @@ class gridsolver:
             logger.error("A black cell is present in the fold line along %s=%d in %s direction", axis, line, direction)
             return f"Error : A black cell is present in the fold line along {axis}={line} in {direction} direction", grid
         except IndexError as ie:
-            logger.error("A black cell is present in the fold line along %s=%d in %s direction", axis, line, direction)
+            logger.error("Fold index is out of range!")
             return f"Fold index is out of range!", grid
 
     def apply_folds(self, grid, folds):
