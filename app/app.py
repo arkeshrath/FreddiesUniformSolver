@@ -75,7 +75,7 @@ def process_file():
     return jsonify({"error": "Invalid request method"}), 405
 
 
-@app.route('/upload-and-process-file', methods=['GET', 'POST'])
+@app.route('/ui/v1/uniform-finder', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         # check if the post request has the file part
