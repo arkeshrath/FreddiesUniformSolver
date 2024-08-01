@@ -2,25 +2,20 @@
 import hashlib
 import logging
 import re
-
+from app.utilities.constants import ALLOWED_EXTENSIONS
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 
 class Helper:
 
     def validate_input(self, input_str):
     # Define the regex patterns
-        cell_pattern = re.compile(r'^cell at x=\d+,y=\d+$')
-        fold_pattern = re.compile(r'^fold (up|down|left|right) along [xy]=\d+$')
-        empty_pattern = re.compile(r'^$')
+        cell_pattern = re.compile(r'^cell at x=\d+,y=\d+$') # Pattern for coordinate
+        fold_pattern = re.compile(r'^fold (up|down|left|right) along [xy]=\d+$') # Pattern for fold instruction
+        empty_pattern = re.compile(r'^$') # Pattern for new line
 
         # Check the input string against each pattern
-        if cell_pattern.match(input_str):
-            return True
-        elif fold_pattern.match(input_str):
-            return True
-        elif empty_pattern.match(input_str):
+        if cell_pattern.match(input_str) or fold_pattern.match(input_str) or empty_pattern.match(input_str):
             return True
         else:
             return False
@@ -30,7 +25,12 @@ class Helper:
         md5.update(file_content.encode('utf-8'))
         return md5.hexdigest()
 
+    def allowed_file(self, filename):
+        print('HEREEEEE----')
+        return filename.rsplit('.', 1)[-1].lower() in ALLOWED_EXTENSIONS
+
     def parse_file_content(self, file_content):
+        """ Parses the clue file. """
         coords = []
         folds = []
         lines = file_content.strip().split('\n')

@@ -27,56 +27,52 @@ helper = Helper()
 # In production we will point this to a cloud storage blob/container
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 @app.route('/process-file', methods=['GET', 'POST'])
 def process_file():
-    filename = request.json.get('filename')
-    start_time = time.time()
+    if request.method == 'POST' or request.method == 'GET':
+        filename = request.json.get('filename')
+        start_time = time.time()
 
-    if not filename:
-        logger.warning("Filename is required")
-        return jsonify({"error": "Filename is required"}), 400
+        if not filename or not helper.allowed_file(filename):
+            logger.warning("Filename is required or file extension is not accepted!")
+            return jsonify({"error": "Filename is required"}), 400
 
-    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
-    if not os.path.exists(file_path):
-        logger.warning("File not found: %s", filename)
-        return jsonify({"error": "File not found"}), 404
+        if not os.path.exists(file_path):
+            logger.warning("File not found: %s", filename)
+            return jsonify({"error": "File not found"}), 404
 
-    try:
-        with open(file_path, 'r') as f:
-            file_content = f.read()
+        try:
+            with open(file_path, 'r') as f:
+                file_content = f.read()
 
-        # Check for cache hits
-        cache_key = helper.md5_hash(file_content)
-        if cache_instance.get(cache_key):
-            total_time = time.time() - start_time
-            logger.info("Cache hit for filename: %s, now served the request in % seconds", filename, total_time)
-            return jsonify({"message": "File uploaded and grid solved", "filename": filename, "solved": cache_instance.get(cache_key)})
+            # Check for cache hits
+            cache_key = helper.md5_hash(file_content)
+            if cache_instance.get(cache_key):
+                total_time = time.time() - start_time
+                logger.info("Cache hit for filename: %s, now served the request in % seconds", filename, total_time)
+                return jsonify({"message": "File uploaded and grid solved", "filename": filename, "solved": cache_instance.get(cache_key)})
 
-        # Instantiate and solve grid
-        grid_controller = GridController()
-        status, grid, code = grid_controller.solve_grid(file_path)
+            # Instantiate and solve grid
+            grid_controller = GridController()
+            status, grid, code = grid_controller.solve_grid(file_path)
 
-        if code == 400:
-            logger.warning(status)
-            return jsonify({"error": status}), 400
+            if code == 400:
+                logger.warning(status)
+                return jsonify({"error": status}), 400
 
-        cache_instance.set(cache_key, grid)
+            cache_instance.set(cache_key, grid)
 
-        logger.info("File uploaded and solved grid for filename: %s", filename)
-        return jsonify({"message": "File uploaded and grid solved", "filename": filename, "solved": grid})
+            logger.info("File uploaded and solved grid for filename: %s", filename)
+            return jsonify({"message": "File uploaded and grid solved", "filename": filename, "solved": grid})
 
-    except Exception as e:
-        logger.error("Error uploading file: %s", str(e))
-        return jsonify({"error": str(e)}), 500
+        except Exception as e:
+            logger.error("Error uploading file: %s", str(e))
+            return jsonify({"error": str(e)}), 500
 
-
-def allowed_file(filename):
-    """ Helper method to validate files. """
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return jsonify({"error": "Invalid request method"}), 405
 
 
 @app.route('/upload-and-process-file', methods=['GET', 'POST'])
