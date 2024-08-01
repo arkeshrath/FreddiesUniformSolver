@@ -89,3 +89,5 @@ Error Handling: Basic error handling is implemented. For a production-grade serv
 
 Folding Logic: The folding logic checks for the presence of black cells along the fold line and raises errors if present. This ensures that folds are valid but may need further optimization for large grids.
 
+Scalability : Currently the web service is running with 1 worker thread, this is in order to show the caching implementation of the project. For productioninizing, we will be using multiple worker threads and fine tune this number depending on our compute layer.
+
