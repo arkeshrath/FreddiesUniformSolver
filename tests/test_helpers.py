@@ -39,5 +39,9 @@ class TestHelper(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.helper.parse_file_content(self.invalid_content)
 
+    def test_allowed_file(self):
+        assert self.helper.allowed_file('abc.txt') == True
+        assert self.helper.allowed_file('abc.png') == False
+
 if __name__ == '__main__':
     unittest.main()

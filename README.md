@@ -46,6 +46,12 @@ Freddie's missing uniform service is a simple flask-based web service for deciph
     ./run.sh
     ```
 
+    To run the same alongside an external cache server please run,
+    ```sh
+   chmod +x run_with_cache.sh
+    ./run_with_cache.sh
+    ```
+
 2. The service will be available at `http://localhost:8000/process-file`.
 
 ### Usage
@@ -60,7 +66,7 @@ curl -X POST http://localhost:8000/process-file \
 -d '{"filename": "secret-message.0.txt"}'
 ```
 
-To use the demo UI, please open your web browser and go to `http://localhost:8000/upload-and-process-file`.
+To use the demo UI, please open your web browser and go to `http://localhost:8000/ui/v1/uniform-finder`.
 
 
 
@@ -70,6 +76,8 @@ Logs are maintained for various operations, including grid creation, folding, an
 
 ### Caching
 An in-memory cache has been implemented to speed up operations on the same file. For scaling this in production, we would need to implement a distributed cache like redis.
+
+An implementation has also been provided with a simple external cache service.
 
 ### Unit Tests
 

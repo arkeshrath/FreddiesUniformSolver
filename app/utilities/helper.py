@@ -7,7 +7,6 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class Helper:
-
     def validate_input(self, input_str):
     # Define the regex patterns
         cell_pattern = re.compile(r'^cell at x=\d+,y=\d+$') # Pattern for coordinate
@@ -26,7 +25,6 @@ class Helper:
         return md5.hexdigest()
 
     def allowed_file(self, filename):
-        print('HEREEEEE----')
         return filename.rsplit('.', 1)[-1].lower() in ALLOWED_EXTENSIONS
 
     def parse_file_content(self, file_content):
