@@ -16,28 +16,6 @@ Freddie's missing uniform service is a simple flask-based web service for deciph
     git clone https://github.com/arkeshrath/FreddiesUniformSolver.git
     ```
 
-2. Create a virtual environment:
-    ```sh
-    python -m venv venv
-    ```
-
-3. Activate the virtual environment:
-
-    On Windows:
-    ```sh
-    venv\Scripts\activate
-    ```
-
-    On macOS/Linux:
-    ```sh
-    source venv/bin/activate
-    ```
-
-4. Install the required packages:
-    ```sh
-    pip install -r requirements.txt
-    ```
-
 ### Running the Application
 
 1. Start the Flask app with provided shell script:
